@@ -159,7 +159,7 @@ class GraficaDeDeBruijn:
     
     def __str__(self) -> str:
         """
-        La digráfica se imprime como el vértice con su lista de exvecinos e invecinos
+        La digráfica se imprime como cada uno de sus vértices con su lista de exvecinos e invecinos
         """
         s = ''
         for v in self.vertices.values():
