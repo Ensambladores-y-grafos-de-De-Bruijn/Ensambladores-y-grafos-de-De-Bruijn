@@ -70,7 +70,7 @@ class GraficaDeDeBuijn:
        
         # Checamos que nuestra gráfica sea euleriana
         no_balanceados = []
-        # vértices inicial y final en caso de que existan vértices balanceados
+        # vértices inicial y final en caso de que existan vértices semibalanceados
         vertice_inicial = None
         vertice_final = None
         for vertice in self.vertices.values():
