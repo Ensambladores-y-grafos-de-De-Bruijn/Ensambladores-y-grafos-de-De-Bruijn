@@ -41,12 +41,17 @@ class Vertice:
     __repr__ = __str__
 
 
-class GraficaDeDeBuijn:
+class GraficaDeDeBruijn:
     """
     Clase para representar gráficas de Debruijn.
     """
 
     def __init__(self, cadena, k):
+        """
+        Constructor de la clase.
+        :param cadena: La cadena de donde se sacarán los k-mers.
+        :param k: Tamaño que se desea utilizar para los k-mers.
+        """
         # Atributos de una gráfica
         self.vertices = {}
         self.vertice_inicial = None # Vértice de donde se comenzará el recorrido
@@ -83,9 +88,10 @@ class GraficaDeDeBuijn:
                     # En otro caso, el balance es -1 y por tanto aquí debe terminar el paseo euleriano
                     else:
                         vertice_final = vertice
-       
-        for v in self.vertices.values():
-            print('Vértice: {}      Exvecinos: {}       Invecinos: {}'.format(v.k_mer,v.exvecinos, v.invecinos))
+                # En caso de tener un vértice que no es balanceado o semibalanceado, entonces
+                # no tenemos una digráfica euleriana
+                else:
+                    assert False, 'La digráfica no es Euleriana'
        
         # Si tenemos más de dos vértices que son semibalanceados, o no tenemos vértice de inicio o fin, entonces no tenemos
         # una digráfica euleriana
@@ -104,6 +110,8 @@ class GraficaDeDeBuijn:
     def construye_secuencia_original(self):
         """
         Método que intenta recuperar la secuencia original dado el paseo euleriano.
+
+        :return: Cadena que se reconstruye usando el paseo euleriano.
         """
         paseo = self.get_paseo_euleriano()
         original = ''.join(vertice.k_mer[-1] for vertice in paseo[1:])
@@ -112,7 +120,11 @@ class GraficaDeDeBuijn:
         
     def dibuja_digrafica(self, nombre):
         """
-        Método que crea la representación gráfica de la digráfica de De Bruijn."""
+        Método que crea la representación gráfica de la digráfica de De Bruijn.
+        
+        :param nombre: String con el nombre que se le desea dar al archivo donde
+                        se guardará la digráfica.
+        """
         d = Digraph(name=nombre)
         for llave, valor in self.vertices.items():
             for exvecino in valor.exvecinos:
@@ -144,6 +156,17 @@ class GraficaDeDeBuijn:
             else:
                 siguiente = H.vertices[actual.exvecinos.pop()]
                 stack.append(siguiente)
+    
+    def __str__(self) -> str:
+        """
+        La digráfica se imprime como el vértice con su lista de exvecinos e invecinos
+        """
+        s = ''
+        for v in self.vertices.values():
+            s += 'Vértice: {}      Exvecinos: {}       Invecinos: {}'.format(v.k_mer,v.exvecinos, v.invecinos)
+        return s
+    
+    __repr__ = __str__
 
 s = ("GATTTCAAAAGCATTCTGTTGTTCTTTGAGGTCAGCAACCTGACCAATAAAA"
     "ACTTCAGCACTTGTATCAAGTACCAAGACATCTTGGGTCAGTAGATCATCTTGACTATTTCATTACTGTTTTCT"
@@ -160,18 +183,15 @@ s = ("GATTTCAAAAGCATTCTGTTGTTCTTTGAGGTCAGCAACCTGACCAATAAAA"
     "ATAAGAGGATCGACCTTTACTCGTCCATCTGTCTTACTTTCAGAAGTGATAAATTGTCTAGTAGGGCCATTATT"
     "GAGGTGAACTGACTCAGGAATATTTTCACTAACATATGCAGGAATTTCGAATGGAATCAA")
 
-g = GraficaDeDeBuijn(s, 10)
-print(g.get_paseo_euleriano())
-print(g.construye_secuencia_original())
+g = GraficaDeDeBruijn(s, 10)
+print('Paseo euleriano encontrado:\n{}'.format(g.get_paseo_euleriano()))
+print('Secuencia recostruida con el paseo euleriano:\n{}'.format(g.construye_secuencia_original()))
 
-print(g.construye_secuencia_original() == s)
-
-print('Original:\n{}'.format(s))
-print('Resultado:\n{}'.format(g.construye_secuencia_original()))
+print('¿Se recreó la secuencia original? {}'.format(g.construye_secuencia_original() == s))
 
 g.dibuja_digrafica('digráfica1')
 
-"""g = GraficaDeDeBuijn('Hola_como_como_como_estas', 4)
+"""g = GraficaDeDeBruijn('Hola_como_como_como_estas', 4)
 print(g.get_paseo_euleriano())
 print(g.construye_secuencia_original())
 g.dibuja_digrafica('digráfica2')"""
