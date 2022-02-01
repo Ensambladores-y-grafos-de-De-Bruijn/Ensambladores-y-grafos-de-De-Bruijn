@@ -46,7 +46,7 @@ class GraficaDeDeBruijn:
     Clase para representar gráficas de Debruijn.
     """
 
-    def __init__(self, cadena, k):
+    def __init__(self, k_mers):
         """
         Constructor de la clase.
         :param cadena: La cadena de donde se sacarán los k-mers.
@@ -56,9 +56,6 @@ class GraficaDeDeBruijn:
         self.vertices = {}
         self.vertice_inicial = None # Vértice de donde se comenzará el recorrido
         self.paseo_euleriano = [] # Donde guardaremos nuestro paseo euleriano
-
-        # Obtenemos nuestros k-mers
-        k_mers = [cadena[i: j] for i in range(len(cadena)) for j in range(i + 1, len(cadena) + 1) if len(cadena[i:j]) == k]
         
         # Creamos nuatra gráfica
         for k_mer in k_mers:
@@ -168,6 +165,18 @@ class GraficaDeDeBruijn:
     
     __repr__ = __str__
 
+
+def dame_k_mers(secuencia, k):
+    """
+    Método que dada una secuencia y tamaño de k-mer, devuelve todos los sufijos y prefijos de los k-mers de dicha secuencia
+    :secuencia: String con la secuencia
+    :k:         tamaño de los k_mers
+    :return:    lista con los prefijos y sufijos de todos los k-mers que haya dentro de la secuencia
+    """
+    # Obtenemos los prefijos y sufijos de los k-mers
+    k_mers = [secuencia[i: j] for i in range(len(secuencia)) for j in range(i + 1, len(secuencia) + 1) if len(secuencia[i:j]) == k]
+    return k_mers
+
 s = ("GATTTCAAAAGCATTCTGTTGTTCTTTGAGGTCAGCAACCTGACCAATAAAA"
     "ACTTCAGCACTTGTATCAAGTACCAAGACATCTTGGGTCAGTAGATCATCTTGACTATTTCATTACTGTTTTCT"
     "TCGGGCTGCCCTTCACCTCTTTGCTTCCAGTATTATAGCCCCCTTCTGCCGGTTGGCTATCATTAGACATGGGA"
@@ -183,7 +192,7 @@ s = ("GATTTCAAAAGCATTCTGTTGTTCTTTGAGGTCAGCAACCTGACCAATAAAA"
     "ATAAGAGGATCGACCTTTACTCGTCCATCTGTCTTACTTTCAGAAGTGATAAATTGTCTAGTAGGGCCATTATT"
     "GAGGTGAACTGACTCAGGAATATTTTCACTAACATATGCAGGAATTTCGAATGGAATCAA")
 
-g = GraficaDeDeBruijn(s, 10)
+g = GraficaDeDeBruijn(dame_k_mers(s, 10))
 print('Paseo euleriano encontrado:\n{}'.format(g.get_paseo_euleriano()))
 print('Secuencia recostruida con el paseo euleriano:\n{}'.format(g.construye_secuencia_original()))
 
