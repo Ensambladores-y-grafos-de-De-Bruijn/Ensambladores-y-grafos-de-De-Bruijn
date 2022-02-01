@@ -49,6 +49,8 @@ Usando gráficas de De Bruijn es posible reconstruir genomas dadas las lecturas 
   <img src="figures/Diagrama.png" />
 </p>
 
+El link si lo quieren editar [aquí](https://drive.google.com/file/d/1is4nNsdQQ7tbTNOh7B3rVVUc1i9vO9cV/view?usp=sharing)
+
 ## Conclusiones
 
 Se investigó y profundizó sobre teoría de gráficas y sus aplicaciones al ensamblaje de genomas. Se aplicaron los conocimientos de programación adquiridos en el curso para la implementación del algoritmo básico que usan las gráficas de De Bruijn.
